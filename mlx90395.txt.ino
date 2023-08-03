@@ -1,33 +1,31 @@
 #include "Adafruit_MLX90395.h"
 
-
-
-
-
-
 Adafruit_MLX90395 sensor = Adafruit_MLX90395();
 
 void setup(void)
 {
-  Serial.begin(115200);
+  Serial.begin(115200); // ensure baud in the Serial monitor is set to the same value
 
-  /* Wait for serial on USB platforms. */
+  // Wait for serial on USB platforms
   while (!Serial) {
       delay(10);
   }
 
   Serial.println("Starting Adafruit MLX90395 Demo");
   
-  if (! sensor.begin_I2C()) {          // hardware I2C mode, can pass in address & alt Wire
+  // Hardware I2C mode, can pass in address & alt Wire
+  if (! sensor.begin_I2C()) {
     Serial.println("No sensor found ... check your wiring?");
     while (1) { delay(10); }
   }
+  
   Serial.print("Found a MLX90395 sensor with unique id 0x");
   Serial.print(sensor.uniqueID[0], HEX);
   Serial.print(sensor.uniqueID[1], HEX);
   Serial.println(sensor.uniqueID[2], HEX);
 
-  sensor.setOSR(MLX90395_OSR_8); // OSR 8
+  // OSR
+  sensor.setOSR(MLX90395_OSR_8); // optimal OSR: 8 {1, 2, 4, 8}
   Serial.print("OSR set to: ");
   switch (sensor.getOSR()) {
     case MLX90395_OSR_1: Serial.println("1 x"); break;
@@ -36,7 +34,8 @@ void setup(void)
     case MLX90395_OSR_8: Serial.println("8 x"); break;
   }
   
-  sensor.setResolution(MLX90395_RES_19); // Res 19
+  // Resolution
+  sensor.setResolution(MLX90395_RES_19); // optimal resolution: 19 {16, 17, 18, 19}
   Serial.print("Resolution: ");
   switch (sensor.getResolution()) {
     case MLX90395_RES_16: Serial.println("16b"); break;
@@ -45,7 +44,8 @@ void setup(void)
     case MLX90395_RES_19: Serial.println("19b"); break;
   }
   
-  sensor.setGain(7); // optimized 7 - integer [0, 15]
+  // Gain Selection
+  sensor.setGain(7); // optimal gainSel: 7 {0-15}
   Serial.print("Gain: "); Serial.println(sensor.getGain());
 }
 
